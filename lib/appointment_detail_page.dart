@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final appointment = Get.arguments as Map<String, dynamic>;
+var appointment;
+
 List<Map<String, dynamic>> appointments = [];
 
 class AppointmentDetailsPage extends StatefulWidget {
@@ -42,29 +43,24 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     // Decode JSON strings to Map<String, dynamic>
     setState(() {
       appointments = storedAppointments.map((appointmentJson) {
-        return Map<String, dynamic>.from(jsonDecode(appointmentJson));
+        return Map<String, String>.from(jsonDecode(appointmentJson));
       }).toList();
     });
   }
 
-  void removeAppointmentById(String idToRemove) {
+  void removeAppointmentById(String idToRemove) async {
     appointments.removeWhere((appointment) => appointment['id'] == idToRemove);
     log(appointments.toString());
-  }
-
-  void updateAppointment() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> existingAppointments =
-        prefs.getStringList('appointments') ?? [];
-    existingAppointments.add(jsonEncode(appointment));
-
-    await prefs.setStringList('appointments', existingAppointments);
+    var newAppointmentsList =
+        appointments.map((appointment) => jsonEncode(appointment)).toList();
+    await prefs.setStringList('appointments', newAppointmentsList);
   }
 
   @override
   void initState() {
     _loadAppointments();
-    log(appointments.toString());
+    appointment = Get.arguments as Map<String, dynamic>;
     super.initState();
   }
 
@@ -241,9 +237,10 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                               onPressed: () async {
                                 log(appointment['id']);
                                 removeAppointmentById(appointment['id']);
-                                updateAppointment();
+
                                 // Logic to remove the appointment
                                 Get.back(); // Close dialog
+
                                 Get.offAllNamed(
                                     "/dashboard"); // Return to previous page
                               },
