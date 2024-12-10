@@ -120,7 +120,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
             ElevatedButton(
               onPressed: () async {
                 await _saveAppointment();
-                Get.toNamed('/dashboard');
+                Get.offAllNamed('/dashboard');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
