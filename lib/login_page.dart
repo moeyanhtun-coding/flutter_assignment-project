@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/custom_widget/custom_text_field.dart';
 import 'package:get/route_manager.dart';
@@ -57,6 +59,11 @@ class _LoginBodyState extends State<LoginBody> {
       );
       return false;
     }
+    Object loginData = {
+      'email': savedEmail,
+      'password': savedPassword,
+    };
+    log(loginData.toString());
     return true;
   }
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateAppointmentPage extends StatefulWidget {
   const CreateAppointmentPage({super.key});
@@ -15,6 +16,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
   String? _selectedTime;
   TextEditingController patientName = TextEditingController();
   TextEditingController purpose = TextEditingController();
+  TextEditingController note = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +93,15 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
               ),
             ),
             const SizedBox(height: 20),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: "Note",
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.note),
+              ),
+              controller: note,
+            ),
+            const SizedBox(height: 20),
 
             // Purpose Input
             TextField(
@@ -159,6 +170,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
   }
 
   Future<void> _saveAppointment() async {
+    var uuid = Uuid();
     if (patientName.text.isNotEmpty &&
         purpose.text.isNotEmpty &&
         _selectedDate != null &&
@@ -166,10 +178,12 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       final newAppointment = {
+        'id': uuid.v1(),
         'name': patientName.text,
         'date': _selectedDate!,
         'time': _selectedTime!,
         'purpose': purpose.text,
+        'note': note.text
       };
 
       List<String> existingAppointments =

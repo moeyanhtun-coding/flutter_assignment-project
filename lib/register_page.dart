@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,6 +78,25 @@ class _RegisterBodyState extends State<RegisterBody> {
     Get.offAllNamed('/dashboard'); // Redirect to the dashboard page
   }
 
+  Future<void> _showRegisterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? getName = await prefs.getString('name');
+    String? getEmail = await prefs.getString('email');
+    String? getPassword = await prefs.getString('password');
+    String? getSpecialty = await prefs.getString('specialty');
+    String? getContact = await prefs.getString("contact");
+
+    Object accountInfo = {
+      'name': getName,
+      'email': getEmail,
+      'password': getPassword,
+      'specialty': getSpecialty,
+      'contact': getContact
+    };
+
+    log(accountInfo.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -104,7 +125,10 @@ class _RegisterBodyState extends State<RegisterBody> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _registerUser,
+              onPressed: () async {
+                await _registerUser();
+                await _showRegisterData();
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),

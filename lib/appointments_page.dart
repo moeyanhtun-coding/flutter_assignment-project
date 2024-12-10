@@ -57,7 +57,8 @@ class _AppointmentsBodyState extends State<AppointmentsBody> {
   /// Load appointments from SharedPreferences
   void _loadAppointments() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> storedAppointments = prefs.getStringList('appointments') ?? [];
+    List<dynamic> storedAppointments =
+        prefs.getStringList('appointments') ?? [];
     log('Loaded appointments: $storedAppointments');
 
     // Decode JSON strings to Map<String, dynamic>
