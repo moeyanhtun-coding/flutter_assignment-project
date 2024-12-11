@@ -212,7 +212,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                   ElevatedButton(
                     onPressed: () {
                       // Navigate to Edit Appointment screen
-                      Get.toNamed('/editAppointment', arguments: appointment);
+                      Get.toNamed('/editAppointment', arguments: appointment['id']);
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
