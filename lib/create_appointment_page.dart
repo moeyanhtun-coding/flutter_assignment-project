@@ -93,6 +93,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
               ),
             ),
             const SizedBox(height: 20),
+
             TextField(
               decoration: const InputDecoration(
                 labelText: "Note",
@@ -119,8 +120,21 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
             // Save Appointment Button
             ElevatedButton(
               onPressed: () async {
-                await _saveAppointment();
-                Get.offAllNamed('/dashboard');
+                final success = await _saveAppointmentToStorage(
+                  patientName: patientName.text,
+                  selectedDate: _selectedDate,
+                  selectedTime: _selectedTime,
+                  purpose: purpose.text,
+                  note: note.text,
+                );
+
+                if (success) {
+                  Get.offAllNamed('/dashboard');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please fill in all fields")),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
@@ -169,21 +183,26 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
     }
   }
 
-  Future<void> _saveAppointment() async {
-    var uuid = Uuid();
-    if (patientName.text.isNotEmpty &&
-        purpose.text.isNotEmpty &&
-        _selectedDate != null &&
-        _selectedTime != null) {
+  Future<bool> _saveAppointmentToStorage({
+    required String patientName,
+    required String? selectedDate,
+    required String? selectedTime,
+    required String purpose,
+    required String note,
+  }) async {
+    if (patientName.isNotEmpty &&
+        purpose.isNotEmpty &&
+        selectedDate != null &&
+        selectedTime != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       final newAppointment = {
-        'id': uuid.v1(),
-        'name': patientName.text,
-        'date': _selectedDate!,
-        'time': _selectedTime!,
-        'purpose': purpose.text,
-        'note': note.text
+        'id': Uuid().v1(),
+        'name': patientName,
+        'date': selectedDate,
+        'time': selectedTime,
+        'purpose': purpose,
+        'note': note
       };
 
       List<String> existingAppointments =
@@ -191,11 +210,8 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
       existingAppointments.add(jsonEncode(newAppointment));
 
       await prefs.setStringList('appointments', existingAppointments);
-    } else {
-      // Handle validation error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill in all fields")),
-      );
+      return true;
     }
+    return false;
   }
 }

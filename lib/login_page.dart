@@ -16,6 +16,7 @@ class LoginPage extends StatelessWidget {
         title: const Center(
           child: Text(
             "Login",
+            key: Key('AppBarTitle'), // Unique key for the AppBar title
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -23,7 +24,7 @@ class LoginPage extends StatelessWidget {
           ),
         ),
       ),
-      body: LoginBody(),
+      body: const LoginBody(),
     );
   }
 }
@@ -43,14 +44,13 @@ class _LoginBodyState extends State<LoginBody> {
 
   Future<bool> _loginUser() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedEmail = prefs.getString('email') ?? null;
-    final savedPassword = prefs.getString('password') ?? null;
+    final savedEmail = prefs.getString('email');
+    final savedPassword = prefs.getString('password');
 
     if (emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
         emailController.text != savedEmail ||
         passwordController.text != savedPassword) {
-      // Navigate to dashboard
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Invalid email or password. Please try again."),
@@ -80,6 +80,7 @@ class _LoginBodyState extends State<LoginBody> {
           ),
           const Text(
             "Welcome Medical Professionals",
+            key: Key('WelcomeText'), // Unique key for the welcome text
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -92,15 +93,19 @@ class _LoginBodyState extends State<LoginBody> {
             controller: emailController,
             label: "Email",
             obscureText: false,
+            key: const Key('EmailField'), // Unique key for the email field
           ),
           const SizedBox(height: 20),
           CustomTextField(
             controller: passwordController,
             label: "Password",
             obscureText: true,
+            key:
+                const Key('PasswordField'), // Unique key for the password field
           ),
           const SizedBox(height: 20),
           ElevatedButton(
+            key: const Key('LoginButton'), // Unique key for the login button
             onPressed: () async {
               bool result = await _loginUser();
               result ? Get.offAllNamed('/dashboard') : null;
@@ -125,8 +130,9 @@ class _LoginBodyState extends State<LoginBody> {
               children: [
                 const Text("Don't have an account? "),
                 TextButton(
+                  key: const Key(
+                      'SignupButton'), // Unique key for the signup button
                   onPressed: () {
-                    // Navigate to signup screen
                     Get.offAllNamed("/signup");
                   },
                   child: const Text("Signup"),
