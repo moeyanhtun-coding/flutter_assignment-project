@@ -18,7 +18,7 @@ final routes = [
   GetPage(name: '/dashboard', page: () => AppointmentsPage()),
   GetPage(name: '/createAppointment', page: () => CreateAppointmentPage()),
   GetPage(name: '/appointmentDetails', page: () => AppointmentDetailsPage()),
-  GetPage(name: '/editAppointment', page:()=> AppointmentEditPage()),
+  GetPage(name: '/editAppointment', page: () => AppointmentEditPage()),
 ];
 
 class MyApp extends StatelessWidget {

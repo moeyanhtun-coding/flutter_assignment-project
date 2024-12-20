@@ -272,16 +272,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.0"
-<<<<<<< HEAD
-  mocktail:
-    dependency: "direct main"
-    description:
-      name: mocktail
-      sha256: "890df3f9688106f25755f26b1c60589a92b3ab91a22b8b224947ad041bf172d8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
-=======
   mockito:
     dependency: "direct dev"
     description:
@@ -290,6 +280,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.4"
+  mocktail:
+    dependency: "direct main"
+    description:
+      name: mocktail
+      sha256: "890df3f9688106f25755f26b1c60589a92b3ab91a22b8b224947ad041bf172d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   package_config:
     dependency: transitive
     description:
@@ -298,7 +296,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
->>>>>>> dc7ee1143d8d0affa8a8d8118c383dc5a0de88a4
   path:
     dependency: transitive
     description:
