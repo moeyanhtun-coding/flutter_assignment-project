@@ -39,6 +39,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^27.2.5
   shared_preferences: ^2.3.3
   uuid: ^4.5.1
+  mocktail: ^1.0.4
 
 dev_dependencies:
   flutter_test:
