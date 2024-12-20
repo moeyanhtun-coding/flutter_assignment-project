@@ -31,7 +31,9 @@ class RegisterPage extends StatelessWidget {
 }
 
 class RegisterBody extends StatefulWidget {
-  const RegisterBody({super.key});
+  final SharedPreferences? sharedPreferences;
+
+  const RegisterBody({super.key, this.sharedPreferences});
 
   @override
   State<RegisterBody> createState() => _RegisterBodyState();
@@ -59,42 +61,22 @@ class _RegisterBodyState extends State<RegisterBody> {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        widget.sharedPreferences ?? await SharedPreferences.getInstance();
 
-    // Save data to shared preferences
     await prefs.setString('name', nameController.text);
     await prefs.setString('email', emailController.text);
     await prefs.setString('password', passwordController.text);
     await prefs.setString('specialty', specialtyController.text);
     await prefs.setString('contact', contactController.text);
 
-    // Navigate to dashboard
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Account created successfully!"),
         backgroundColor: Colors.green,
       ),
     );
-    Get.offAllNamed('/dashboard'); // Redirect to the dashboard page
-  }
-
-  Future<void> _showRegisterData() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? getName = await prefs.getString('name');
-    String? getEmail = await prefs.getString('email');
-    String? getPassword = await prefs.getString('password');
-    String? getSpecialty = await prefs.getString('specialty');
-    String? getContact = await prefs.getString("contact");
-
-    Object accountInfo = {
-      'name': getName,
-      'email': getEmail,
-      'password': getPassword,
-      'specialty': getSpecialty,
-      'contact': getContact
-    };
-
-    log(accountInfo.toString());
+    Get.offAllNamed('/dashboard');
   }
 
   @override
@@ -125,10 +107,7 @@ class _RegisterBodyState extends State<RegisterBody> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                await _registerUser();
-                await _showRegisterData();
-              },
+              onPressed: _registerUser,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),
@@ -147,32 +126,6 @@ class _RegisterBodyState extends State<RegisterBody> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class RouteRegisterLink extends StatelessWidget {
-  const RouteRegisterLink({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          "Already Have an Account? ",
-          style: TextStyle(fontSize: 15),
-        ),
-        TextButton(
-          onPressed: () {
-            Get.offAllNamed('/login');
-          },
-          child: const Text(
-            "Login",
-            style: TextStyle(fontSize: 15),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -199,35 +152,66 @@ class TextFieldGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         CustomTextField(
+          key: const Key('nameField'),
           label: "Name",
           obscureText: false,
           controller: nameController,
         ),
         const SizedBox(height: 20),
         CustomTextField(
+          key: const Key('emailField'),
           label: "Email",
           obscureText: false,
           controller: emailController,
         ),
         const SizedBox(height: 20),
         CustomTextField(
+          key: const Key('passwordField'),
           label: "Password",
           obscureText: true,
           controller: passwordController,
         ),
         const SizedBox(height: 20),
         CustomTextField(
+          key: const Key('specialtyField'),
           label: "Specialty",
           obscureText: false,
           controller: specialtyController,
         ),
         const SizedBox(height: 20),
         CustomTextField(
+          key: const Key('contactField'),
           label: "Contact Information",
           obscureText: false,
           controller: contactController,
         ),
         const SizedBox(height: 10),
+      ],
+    );
+  }
+}
+
+class RouteRegisterLink extends StatelessWidget {
+  const RouteRegisterLink({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Already Have an Account? ",
+          style: TextStyle(fontSize: 15),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.offAllNamed('/login');
+          },
+          child: const Text(
+            "Login",
+            style: TextStyle(fontSize: 15),
+          ),
+        ),
       ],
     );
   }
