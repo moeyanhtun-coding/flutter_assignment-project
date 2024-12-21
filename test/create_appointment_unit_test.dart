@@ -9,8 +9,6 @@ void main() {
     SharedPreferences.setMockInitialValues({});
 
     final prefs = await SharedPreferences.getInstance();
-    final appointments = <String>[];
-
     final success = await saveAppointmentToStorage(
       prefs: prefs,
       patientName: 'John Doe',
@@ -38,7 +36,7 @@ Future<bool> saveAppointmentToStorage({
       selectedDate != null &&
       selectedTime != null) {
     final newAppointment = {
-      'id': Uuid().v1(),
+      'id': const Uuid().v1(),
       'name': patientName,
       'date': selectedDate,
       'time': selectedTime,

@@ -10,7 +10,7 @@ void main() {
   group('Login Page Tests', () {
     testWidgets('should find Email TextField', (WidgetTester tester) async {
       await tester.pumpWidget(
-        GetMaterialApp(
+        const GetMaterialApp(
           home: LoginPage(),
         ),
       );
@@ -19,7 +19,7 @@ void main() {
 
     testWidgets('should find Password TextField', (WidgetTester tester) async {
       await tester.pumpWidget(
-        GetMaterialApp(
+        const GetMaterialApp(
           home: LoginPage(),
         ),
       );
@@ -28,7 +28,7 @@ void main() {
     testWidgets('should navigate to /home on successful login',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        GetMaterialApp(
+        const GetMaterialApp(
           home: LoginPage(),
         ),
       );
